@@ -1,35 +1,35 @@
 # Exact copy from child module to ensure feature parity
 output "azurerm_lb" {
   description = "Outputs the entire Azure Load Balancer resource"
-  value       = azurerm_lb.this
+  value       = module.res-network-loadbalancer.azurerm_lb
 }
 
 output "azurerm_lb_backend_address_pool" {
   description = "Outputs each backend address pool in its entirety"
-  value       = azurerm_lb_backend_address_pool.this
+  value       = module.res-network-loadbalancer.azurerm_lb_backend_address_pool
 }
 
 output "azurerm_lb_nat_rule" {
   description = "Outputs each NAT rule in its entirety"
-  value       = azurerm_lb_nat_rule.this
+  value       = module.res-network-loadbalancer.azurerm_lb_nat_rule
 }
 
 output "azurerm_public_ip" {
   description = "Outputs each Public IP Address resource in its entirety"
-  value       = azurerm_public_ip.this
+  value       = module.res-network-loadbalancer.azurerm_public_ip
 }
 
 output "name" {
   description = "Outputs the entire Azure Load Balancer resource"
-  value       = azurerm_lb.this.name
+  value       = module.res-network-loadbalancer.name
 }
 
 output "resource" {
   description = "Outputs the entire Azure Load Balancer resource"
-  value       = azurerm_lb.this
+  value       = module.res-network-loadbalancer.resource
 }
 
 output "resource_id" {
   description = "Outputs the entire Azure Load Balancer resource"
-  value       = azurerm_lb.this.id
+  value       = module.res-network-loadbalancer.resource_id
 }
