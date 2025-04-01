@@ -45,23 +45,6 @@ variable "frontend_ip_configurations" {
       marketplace_partner_resource_id          = optional(string, null)
     })) 
   }))
-  default = {
-    frontend_configuration_1 = {
-      name = "internal_lb_private_ip_1_config"
-      diagnostic_settings = {
-        name                                     = "mandatory-logs"
-        log_categories                           = toset(["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"])
-        log_groups                               = toset(["allLogs"])
-        metric_categories                        = toset(["AllMetrics"])
-        log_analytics_destination_type           = "Dedicated"
-        workspace_resource_id                    = null
-        storage_account_resource_id              = null
-        event_hub_authorization_rule_resource_id = null
-        event_hub_name                           = null
-        marketplace_partner_resource_id          = null
-      }
-    }
-  }
   description = <<DESCRIPTION
   A map of objects that builds frontend ip configurations for the load balancer. 
   You need at least one frontend ip configuration to deploy a load balancer.
