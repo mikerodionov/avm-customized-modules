@@ -10,7 +10,6 @@ module "res-network-loadbalancer" {
   sku                           	= var.sku
   sku_tier                      	= var.sku_tier
   tags                          	= var.tags
-  frontend_ip_configurations    	= var.frontend_ip_configurations
   frontend_subnet_resource_id   	= var.frontend_subnet_resource_id
   backend_address_pools         	= var.backend_address_pools
   backend_address_pool_configuration = var.backend_address_pool_configuration
@@ -28,5 +27,21 @@ module "res-network-loadbalancer" {
   # main.role_assignments.tf
   role_assignments = var.role_assignments
   # main.diagnostic_settings.tf
-  diagnostic_settings = var.diagnostic_settings
+  ### Azure Load Balancer diagnostic must be enabled
+  ### You cannot disable logs but you can specify workspace, storage, and event hub
+  frontend_ip_configurations = {
+    for k, v in var.frontend_ip_configurations : k => merge(v, {
+      diagnostic_settings = {
+        name               = "mandatory-logs"
+        log_categories     = ["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"]
+        log_groups         = ["allLogs"]
+        metric_categories  = ["AllMetrics"]
+        log_analytics_destination_type = "Dedicated"
+        workspace_resource_id = lookup(v.diagnostic_settings, "workspace_resource_id", null)
+        storage_account_resource_id = lookup(v.diagnostic_settings, "storage_account_resource_id", null)
+        event_hub_authorization_rule_resource_id = lookup(v.diagnostic_settings, "event_hub_authorization_rule_resource_id", null)
+        event_hub_name = lookup(v.diagnostic_settings, "event_hub_name", null)
+      }
+    })
+  }
 }
