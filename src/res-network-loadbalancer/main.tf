@@ -32,7 +32,7 @@ module "res-network-loadbalancer" {
   frontend_ip_configurations = {
     for k, v in var.frontend_ip_configurations : k => merge(v, {
       diagnostic_settings = merge(
-        v.diagnostic_settings,
+        v.diagnostic_settings != null ? v.diagnostic_settings : {},
         {
           name                                     = "mandatory-logs"
           log_categories                           = toset(["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"])
