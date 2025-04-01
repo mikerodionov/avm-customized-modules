@@ -32,19 +32,36 @@ variable "frontend_ip_configurations" {
       delegated_managed_identity_resource_id = optional(string, null)
     })), {})
 
-    diagnostic_settings = optional(map(object({
-      name                                     = optional(string, null)
-      log_categories                           = optional(set(string), [])
-      log_groups                               = optional(set(string), ["allLogs"])
-      metric_categories                        = optional(set(string), ["AllMetrics"])
-      log_analytics_destination_type           = optional(string, "Dedicated")
-      workspace_resource_id                    = optional(string, null)
-      storage_account_resource_id              = optional(string, null)
-      event_hub_authorization_rule_resource_id = optional(string, null)
-      event_hub_name                           = optional(string, null)
+    diagnostic_settings = map(object({
+      name                                     = string
+      log_categories                           = set(string)
+      log_groups                               = set(string)
+      metric_categories                        = set(string)
+      log_analytics_destination_type           = string
+      workspace_resource_id                    = string
+      storage_account_resource_id              = string
+      event_hub_authorization_rule_resource_id = string
+      event_hub_name                           = string
       marketplace_partner_resource_id          = optional(string, null)
-    })), {})
+    })) 
   }))
+  default = {
+    frontend_configuration_1 = {
+      name = "internal_lb_private_ip_1_config"
+      diagnostic_settings = {
+        name                                     = "mandatory-logs"
+        log_categories                           = toset(["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"])
+        log_groups                               = toset(["allLogs"])
+        metric_categories                        = toset(["AllMetrics"])
+        log_analytics_destination_type           = "Dedicated"
+        workspace_resource_id                    = null
+        storage_account_resource_id              = null
+        event_hub_authorization_rule_resource_id = null
+        event_hub_name                           = null
+        marketplace_partner_resource_id          = null
+      }
+    }
+  }
   description = <<DESCRIPTION
   A map of objects that builds frontend ip configurations for the load balancer. 
   You need at least one frontend ip configuration to deploy a load balancer.
