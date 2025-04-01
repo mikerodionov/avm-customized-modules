@@ -33,9 +33,9 @@ module "res-network-loadbalancer" {
     for k, v in var.frontend_ip_configurations : k => merge(v, {
       diagnostic_settings = {
         name               = "mandatory-logs"
-        log_categories     = ["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"]
-        log_groups         = ["allLogs"]
-        metric_categories  = ["AllMetrics"]
+        log_categories     = toset(["LoadBalancerProbeHealthStatus", "LoadBalancerAlertEvent"])
+        log_groups         = toset(["allLogs"])
+        metric_categories  = toset(["AllMetrics"])
         log_analytics_destination_type = "Dedicated"
         workspace_resource_id = lookup(v.diagnostic_settings, "workspace_resource_id", null)
         storage_account_resource_id = lookup(v.diagnostic_settings, "storage_account_resource_id", null)
